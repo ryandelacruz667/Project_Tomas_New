@@ -511,13 +511,10 @@
         helpButton.title = 'Open Help Guide';
         helpButton.addEventListener('click', showHelpModal);
         
-        // Add to top bar
-        var topBar = document.querySelector('.top-bar');
-        if (topBar) {
-            topBar.appendChild(helpButton);
-        } else {
-            document.body.appendChild(helpButton);
-        }
+        // Append directly to body to avoid positioning context issues
+        // (since .top-bar has position: fixed, appending to it would make
+        //  the button's position: fixed relative to the parent, not viewport)
+        document.body.appendChild(helpButton);
     }
 
     /**
