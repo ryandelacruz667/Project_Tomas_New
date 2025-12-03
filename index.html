@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="./resources/ol.css">
+        <link rel="stylesheet" href="resources/fontawesome-all.min.css">
+        <link href="resources/photon-geocoder-autocomplete.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="./resources/ol-layerswitcher.css">
+        <link rel="stylesheet" href="./resources/qgis2web.css">
+        <link rel="stylesheet" href="./css/main.css">
+        <style>
+        html, body {
+            background-color: #ffffff;
+        }
+        .ol-control > * {
+            background-color: #f8f8f8!important;
+            color: #444444!important;
+            border-radius: 0px;
+        }
+        .ol-attribution a, .gcd-gl-input::placeholder, .search-layer-input-search::placeholder {
+            color: #444444!important;
+        }
+        .search-layer-input-search {
+            background-color: #f8f8f8!important;
+        }
+        .ol-control > *:focus, .ol-control >*:hover {
+            background-color: rgba(248, 248, 248, 0.7)!important;
+        } 
+        .ol-control {
+            background-color: rgba(255,255,255,.4) !important;
+            padding: 2px !important;
+        } 
+        </style>
+
+        <style>
+        #map {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+        </style>
+        <title></title>
+    </head>
+    <body>
+        <!-- Top Bar -->
+        <div class="top-bar">
+            <div class="project-title-section">
+                <h1 class="project-logo">PROJECT TOMaS</h1>
+                <p class="project-tagline">(Tactical Overlay for Mapping and Safety)</p>
+            </div>
+            <div class="location-selectors">
+                <div class="location-group">
+                    <label class="location-label">Region</label>
+                    <select class="location-dropdown" id="region-select">
+                        <option value="">Select Region</option>
+                    </select>
+                </div>
+                <div class="location-group">
+                    <label class="location-label">Province</label>
+                    <select class="location-dropdown" id="province-select">
+                        <option value="">Select Province</option>
+                    </select>
+                </div>
+                <div class="location-group">
+                    <label class="location-label">Municipality</label>
+                    <select class="location-dropdown" id="municipality-select">
+                        <option value="">Select Municipality</option>
+                    </select>
+                </div>
+                <div class="location-group">
+                    <label class="location-label">Barangay</label>
+                    <select class="location-dropdown" id="barangay-select">
+                        <option value="">Select Barangay</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Left Sidebar -->
+        <div class="sidebar">
+            <!-- Database Section -->
+            <div class="sidebar-section">
+                <h2 class="sidebar-heading">Database</h2>
+                <nav class="sidebar-nav">
+                    <a href="#" class="nav-item">
+                        <i class="fas fa-home"></i>
+                        <span>Household</span>
+                    </a>
+                    <a href="#" class="nav-item">
+                        <i class="fas fa-users"></i>
+                        <span>ACVs</span>
+                    </a>
+                    <a href="#" class="nav-item">
+                        <i class="fas fa-cog"></i>
+                        <span>Equipment</span>
+                    </a>
+                    <a href="#" class="nav-item">
+                        <i class="fas fa-road"></i>
+                        <span>Roads & Bridges</span>
+                    </a>
+                    <a href="#" class="nav-item">
+                        <i class="fas fa-hospital"></i>
+                        <span>Evac Center</span>
+                    </a>
+                    <a href="#" class="nav-item">
+                        <i class="fas fa-building"></i>
+                        <span>Buildings</span>
+                    </a>
+                    <a href="#" class="nav-item">
+                        <i class="fas fa-school"></i>
+                        <span>Schools</span>
+                    </a>
+                    <a href="#" class="nav-item">
+                        <i class="fas fa-file-alt"></i>
+                        <span>Documentation</span>
+                    </a>
+                </nav>
+            </div>
+
+            <!-- Flood Extent Section -->
+            <div class="sidebar-section">
+                <h2 class="sidebar-heading flood-heading">Flood Extent</h2>
+                <div class="flood-extent-content">
+                    <a href="#" class="nav-item">Flood Extent</a>
+                    <select class="flood-dropdown" id="flood-extent-select">
+                        <option value="">Select Flood Extent</option>
+                        <option value="24">24 meter</option>
+                        <option value="25">25 meters</option>
+                        <option value="26">26 meters</option>
+                        <option value="27">27 meters</option>
+                        <option value="28">28 meters</option>
+                        <option value="29">29 meters</option>
+                        <option value="30">30 meters</option>
+                    </select>
+                    <div class="flood-buttons">
+                        <button class="flood-btn impact-btn">Impact Report</button>
+                        <button class="flood-btn needs-btn">Minimum Needs</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="main-content">
+            <div id="map">
+                <div id="popup" class="ol-popup">
+                    <a href="#" id="popup-closer" class="ol-popup-closer"></a>
+                    <div id="popup-content"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Floating Action Button -->
+        <button class="fab" id="chatbot-fab">
+            <i class="fas fa-robot"></i>
+        </button>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+        <script src="resources/qgis2web_expressions.js"></script>
+        <script src="./resources/functions.js"></script>
+        <script src="./resources/ol.js"></script>
+        <script src="./resources/ol-layerswitcher.js"></script>
+        <script src="resources/photon-geocoder-autocomplete.min.js"></script>
+        <script src="layers/24MetersAnalysisSummary_0.js"></script><script src="layers/24MetersAgrigationsummary_1.js"></script><script src="layers/Peopleexposedat24meters_2.js"></script><script src="layers/25MetersAnalysisSummary_3.js"></script><script src="layers/25MetersAggregationSummary_4.js"></script><script src="layers/Peopleexposedat25meters_5.js"></script><script src="layers/26MetersAnalysisSummary_6.js"></script><script src="layers/26MetersAggregationSummary_7.js"></script><script src="layers/Peopleexposedat26meters_8.js"></script><script src="layers/27MetersAnalysisSummary_9.js"></script><script src="layers/27MetersAggregationSummary_10.js"></script><script src="layers/Peopleexposedat27meters_11.js"></script><script src="layers/28MetersAnalysisSummary_12.js"></script><script src="layers/28MetersAggregationSummary_13.js"></script><script src="layers/Peopleexposedat28meters_14.js"></script><script src="layers/29MetersAnalysisSummary_15.js"></script><script src="layers/29MetersAggregationSummary_16.js"></script><script src="layers/Peopleexposedat29meters_17.js"></script><script src="layers/30MetersAnalysisSummary_18.js"></script><script src="layers/30MetersAggregationSummary_19.js"></script><script src="layers/Peopleexposedat30meters_20.js"></script><script src="layers/Roads_23.js"></script><script src="layers/Schools_24.js"></script><script src="layers/BarangayBoundaries_25.js"></script>        <script src="layers/Households_26.js"></script><script src="layers/DB_0.js"></script>
+        <script src="styles/24MetersAnalysisSummary_0_style.js"></script><script src="styles/24MetersAgrigationsummary_1_style.js"></script><script src="styles/Peopleexposedat24meters_2_style.js"></script><script src="styles/25MetersAnalysisSummary_3_style.js"></script><script src="styles/25MetersAggregationSummary_4_style.js"></script><script src="styles/Peopleexposedat25meters_5_style.js"></script><script src="styles/26MetersAnalysisSummary_6_style.js"></script><script src="styles/26MetersAggregationSummary_7_style.js"></script><script src="styles/Peopleexposedat26meters_8_style.js"></script><script src="styles/27MetersAnalysisSummary_9_style.js"></script><script src="styles/27MetersAggregationSummary_10_style.js"></script><script src="styles/Peopleexposedat27meters_11_style.js"></script><script src="styles/28MetersAnalysisSummary_12_style.js"></script><script src="styles/28MetersAggregationSummary_13_style.js"></script><script src="styles/Peopleexposedat28meters_14_style.js"></script><script src="styles/29MetersAnalysisSummary_15_style.js"></script><script src="styles/29MetersAggregationSummary_16_style.js"></script><script src="styles/Peopleexposedat29meters_17_style.js"></script><script src="styles/30MetersAnalysisSummary_18_style.js"></script><script src="styles/30MetersAggregationSummary_19_style.js"></script><script src="styles/Peopleexposedat30meters_20_style.js"></script><script src="styles/Roads_23_style.js"></script><script src="styles/Schools_24_style.js"></script><script src="styles/BarangayBoundaries_25_style.js"></script><script src="styles/Households_26_style.js"></script>
+        <script src="./layers/layers.js" type="text/javascript"></script> 
+        <script src="./script/hide-layers.js"></script>
+        <script src="./script/populate-dropdowns.js"></script>
+        <script src="./resources/Autolinker.min.js"></script>
+        <script src="./resources/qgis2web.js"></script>
+        <script src="./script/map-zoom.js"></script>
+        <script src="./script/highlight-zoom.js"></script>
+        <script src="./script/filter-households.js"></script>
+        <script src="./script/household-modal.js"></script>
+        <script src="./script/household-chart.js"></script>
+        <script src="./script/flood-extent-chart.js"></script>
+        <script src="./script/minimum-needs-infographics.js"></script>
+        <script src="./script/filter-schools.js"></script>
+        <script src="./script/show-roads.js"></script>
+        <script src="./script/read-excel.js"></script>
+        <script src="./script/show-acvs.js"></script>
+        <script src="./script/show-flood-extent.js"></script>
+    </body>
+</html>
