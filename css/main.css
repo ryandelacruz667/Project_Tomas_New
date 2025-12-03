@@ -2038,3 +2038,12 @@ html, body {
     }
 }
 
+/* Hide address search geocoder */
+.photon-geocoder-autocomplete,
+.photon-input,
+.gcd-gl-btn,
+#gcd-button-control {
+    display: none !important;
+    visibility: hidden !important;
+}
+
