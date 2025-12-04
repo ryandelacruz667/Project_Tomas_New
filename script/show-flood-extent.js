@@ -197,14 +197,33 @@
     }
 
     /**
-     * Enable or disable flood extent dropdown based on barangay selection
+     * Get selected municipality values from dropdown
+     * @returns {Array} - Array of selected municipality names
+     */
+    function getSelectedMunicipalities() {
+        var container = document.getElementById('municipality-checkboxes');
+        if (!container) return [];
+        
+        var checkboxes = container.querySelectorAll('input[type="checkbox"]:checked');
+        var selected = [];
+        checkboxes.forEach(function(checkbox) {
+            if (checkbox.value && !checkbox.disabled) {
+                selected.push(checkbox.value);
+            }
+        });
+        return selected;
+    }
+
+    /**
+     * Enable or disable flood extent dropdown based on barangay or municipality selection
      */
     function updateFloodExtentDropdownState() {
         var select = document.getElementById('flood-extent-select');
         if (!select) return;
 
         var selectedBarangays = getSelectedBarangays();
-        var hasSelection = selectedBarangays.length > 0;
+        var selectedMunicipalities = getSelectedMunicipalities();
+        var hasSelection = selectedBarangays.length > 0 || selectedMunicipalities.length > 0;
 
         if (hasSelection) {
             // Enable dropdown
@@ -257,14 +276,14 @@
             handleFloodExtentChange();
         });
 
-        // Listen for barangay selection changes
+        // Listen for barangay and municipality selection changes
         document.addEventListener('change', function(e) {
             if (e.target.type === 'checkbox' && 
                 e.target.classList.contains('location-checkbox')) {
                 
-                // Check if it's a barangay checkbox
+                // Check if it's a barangay or municipality checkbox
                 var container = e.target.closest('.checkbox-container');
-                if (container && container.id === 'barangay-checkboxes') {
+                if (container && (container.id === 'barangay-checkboxes' || container.id === 'municipality-checkboxes')) {
                     // Update flood extent dropdown state
                     setTimeout(function() {
                         updateFloodExtentDropdownState();
