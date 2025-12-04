@@ -205,7 +205,7 @@
         // Hazard Counts chart
         var hazardCountsContainer = document.createElement('div');
         hazardCountsContainer.className = 'household-chart-item';
-        hazardCountsContainer.innerHTML = '<h4>Hazard Counts</h4>';
+        hazardCountsContainer.innerHTML = '<h4>Exposure Level</h4>';
         chartCanvases.hazardCounts = document.createElement('canvas');
         chartCanvases.hazardCounts.id = 'municipality-chart-canvas-hazard-counts';
         hazardCountsContainer.appendChild(chartCanvases.hazardCounts);
@@ -214,7 +214,7 @@
         // Total Affected chart
         var totalAffectedContainer = document.createElement('div');
         totalAffectedContainer.className = 'household-chart-item';
-        totalAffectedContainer.innerHTML = '<h4>Total Affected vs Not Affected</h4>';
+        totalAffectedContainer.innerHTML = '<h4>Total Affected Population</h4>';
         chartCanvases.totalAffected = document.createElement('canvas');
         chartCanvases.totalAffected.id = 'municipality-chart-canvas-total-affected';
         totalAffectedContainer.appendChild(chartCanvases.totalAffected);
