@@ -214,7 +214,7 @@
         // Total Affected chart
         var totalAffectedContainer = document.createElement('div');
         totalAffectedContainer.className = 'household-chart-item';
-        totalAffectedContainer.innerHTML = '<h4>Total Affected Population</h4>';
+        totalAffectedContainer.innerHTML = '<h4>Total Affected vs Not Affected Population</h4>';
         chartCanvases.totalAffected = document.createElement('canvas');
         chartCanvases.totalAffected.id = 'municipality-chart-canvas-total-affected';
         totalAffectedContainer.appendChild(chartCanvases.totalAffected);
@@ -223,7 +223,7 @@
         // Total Exposed chart
         var totalExposedContainer = document.createElement('div');
         totalExposedContainer.className = 'household-chart-item';
-        totalExposedContainer.innerHTML = '<h4>Total Exposed vs Not Exposed</h4>';
+        totalExposedContainer.innerHTML = '<h4>Total Exposed Population</h4>';
         chartCanvases.totalExposed = document.createElement('canvas');
         chartCanvases.totalExposed.id = 'municipality-chart-canvas-total-exposed';
         totalExposedContainer.appendChild(chartCanvases.totalExposed);
