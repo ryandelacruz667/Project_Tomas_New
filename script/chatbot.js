@@ -21,24 +21,24 @@
     }
 
     /**
-     * Initialize API endpoint - can be configured or auto-detected
+     * Initialize API endpoint - auto-detects Netlify Edge Functions
      */
     function initializeApiEndpoint() {
         // Check if API endpoint is set in a config or use default
         var config = window.CHATBOT_CONFIG || {};
         
-        // Auto-detect if we're on Vercel or local
+        // Auto-detect if we're on production or local
         var isProduction = window.location.hostname !== 'localhost' && 
                           window.location.hostname !== '127.0.0.1';
         
         if (config.apiEndpoint) {
             apiEndpoint = config.apiEndpoint;
         } else if (isProduction) {
-            // Use the current domain for production
+            // Use the current domain for production (Netlify Edge Function)
             apiEndpoint = window.location.origin + '/api/chat';
         } else {
-            // Local development
-            apiEndpoint = 'http://localhost:3000/api/chat';
+            // Local development - try Netlify dev server or fallback
+            apiEndpoint = 'http://localhost:8888/api/chat'; // Netlify dev default port
         }
         
         console.log('Chatbot API endpoint:', apiEndpoint);
@@ -396,20 +396,8 @@
         chatMessages = [];
         sessionId = generateSessionId();
 
-        // Clear backend history
-        try {
-            await fetch(apiEndpoint.replace('/chat', '/chat/clear'), {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    sessionId: sessionId
-                })
-            });
-        } catch (error) {
-            console.error('Error clearing chat history:', error);
-        }
+        // Note: Backend history is session-based and auto-clears on refresh
+        // For Edge Functions, history is in-memory and will reset on deploy
 
         // Add welcome message
         addWelcomeMessage();
