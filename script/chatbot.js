@@ -26,7 +26,20 @@
     function initializeApiEndpoint() {
         // Check if API endpoint is set in a config or use default
         var config = window.CHATBOT_CONFIG || {};
-        apiEndpoint = config.apiEndpoint || 'http://localhost:3000/api/chat';
+        
+        // Auto-detect if we're on Vercel or local
+        var isProduction = window.location.hostname !== 'localhost' && 
+                          window.location.hostname !== '127.0.0.1';
+        
+        if (config.apiEndpoint) {
+            apiEndpoint = config.apiEndpoint;
+        } else if (isProduction) {
+            // Use the current domain for production
+            apiEndpoint = window.location.origin + '/api/chat';
+        } else {
+            // Local development
+            apiEndpoint = 'http://localhost:3000/api/chat';
+        }
         
         console.log('Chatbot API endpoint:', apiEndpoint);
     }
