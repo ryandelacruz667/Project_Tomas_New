@@ -7,8 +7,8 @@
 
 [[edge_functions]]
   path = "/api/chat"
-  function = "netlify/edge-functions/chat"
+  function = "chat"
 
 [[edge_functions]]
   path = "/api/health"
-  function = "netlify/edge-functions/health"
+  function = "health"

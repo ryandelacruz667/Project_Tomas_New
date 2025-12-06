@@ -482,15 +482,30 @@
     async function checkBackendHealth() {
         try {
             var healthEndpoint = apiEndpoint.replace('/chat', '/health');
-            const response = await fetch(healthEndpoint);
+            console.log('Checking health at:', healthEndpoint);
+            
+            const response = await fetch(healthEndpoint, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+            
+            console.log('Health check response status:', response.status);
             
             if (response.ok) {
+                const data = await response.json();
+                console.log('Health check successful:', data);
                 updateStatus('Online', 'online');
             } else {
+                console.error('Health check failed with status:', response.status);
+                const errorText = await response.text();
+                console.error('Error response:', errorText);
                 updateStatus('Offline', 'offline');
             }
         } catch (error) {
-            console.warn('Backend server not available:', error);
+            console.error('Backend server not available:', error);
+            console.error('Error details:', error.message);
             updateStatus('Offline', 'offline');
         }
     }
