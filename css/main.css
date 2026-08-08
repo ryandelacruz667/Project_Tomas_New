@@ -2431,4 +2431,27 @@ html, body {
     }
 }
 
+/* ISU RESPONDS Branding */
+.project-title-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
 
+.responds-logo {
+    width: 55px;
+    height: 55px;
+    object-fit: contain;
+    margin-bottom: 2px;
+}
+
+.responds-title {
+    margin: 0;
+    padding: 0;
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.1;
+}
